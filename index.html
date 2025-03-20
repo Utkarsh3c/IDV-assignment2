@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Critique</title>
+    <style>
+        /* Fullscreen layout with white background */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Intro screen */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Intro arrow */
+        #arrow {
+            font-size: 80px;
+            cursor: pointer;
+            margin-top: 200px;
+            animation: bounce 1s infinite alternate;
+            color: #007BFF;
+        }
+
+        /* Bounce animation */
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        /* Main content container */
+        #content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Image and text container */
+        #main-content {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Image container */
+        #image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding-right: 20px;
+        }
+
+        .uploaded-image {
+            width: auto;
+            height: 100vh;  /* Ensure image fills the screen vertically */
+            max-width: 100%;
+            object-fit: cover; /* Keeps aspect ratio and fills height */
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Text container */
+        #text-container {
+            flex: 2;
+            overflow-y: auto;
+            height: 100vh;
+            padding: 20px;
+            background-color: white;
+        }
+
+        /* Bottom button container */
+        #button-container {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Buttons */
+        button {
+            padding: 12px 18px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            background-color: #17a2b8;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button.active {
+            background-color: #ff9800;
+            transform: scale(1.1);
+        }
+
+        .extra-button {
+            background-color: #dc3545;
+        }
+
+        .extra-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <script>
+        function startApp() {
+            document.getElementById('intro-screen').style.display = 'none';
+            const content = document.getElementById('content');
+            content.style.display = 'flex';
+            setTimeout(() => { content.style.opacity = '1'; }, 100);
+        }
+
+        function switchExample(exampleNumber) {
+            const image = document.querySelector('.uploaded-image');
+            const textContainer = document.getElementById('text-container');
+            const buttons = document.querySelectorAll('.example-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            document.querySelector(`#button${exampleNumber}`).classList.add('active');
+
+            image.style.opacity = '0';
+            setTimeout(() => {
+                if (exampleNumber === 1) {
+                    image.src = "http://longfuture.org/no-dodo-zone/graphics/sixth.jpg";
+                    // Original parent's text is preserved here
+                    textContainer.innerHTML = `
+                        <h3><strong>Evaluation of the Data Visualization: "Are We in the Midst of a Sixth Mass Extinction?"</strong></h3>
+                        <p><strong>Background</strong></p>
+                        <p><strong>Purpose:</strong></p><p>This visualization aims to inform and alarm the audience about the ongoing biodiversity crisis by visually comparing current extinction rates to historical mass extinction events.</p>
+                        <p><strong>Narrative & Emphasis:</strong></p>
+                        </p><p>Uses historical data to contextualize current biodiversity threats.</p>
+                        <p>Graphical elements (icons &amp; color coding) emphasize species loss.</p>
+                        <p>Attempts to evoke urgency through visual contrast and grouping.</p>
+                        <p><strong>Data Issues</strong></p>
+                        <p><strong>Accuracy &amp; Completeness:</strong></p>
+                        <p>The data sources are cited as the International Union for Conservation of Nature (IUCN), which adds credibility.</p>
+                        <p>However, the visualization does not provide a margin of error or confidence intervals, which could mislead viewers regarding the certainty of extinction predictions.</p>
+                        <p><strong>Comparability &amp; Context:</strong></p>
+                        <p>The visual comparison between different species groups is clear but may oversimplify the complexity of extinction dynamics.</p>
+                        <p>The rate of species assessment varies across groups (e.g., birds are well-studied, while insects are underrepresented), leading to potential bias in the reported extinction risks.</p>
+                        <p><strong>Comparability &amp; Context:</strong></p>
+                        <p>The visual comparison between different species groups is clear but may oversimplify the complexity of extinction dynamics.</p>
+                        <p>The rate of species assessment varies across groups (e.g., birds are well-studied, while insects are underrepresented), leading to potential bias in the reported extinction risks.</p>
+                        <p><strong>Idiom Issues (Visualization Technique)</strong></p>
+                        <p><strong>Chart Selection &amp; Design:</strong></p>
+                        <p>The use of proportional icons (each representing 100 species) effectively conveys quantity and scale.</p>
+                        <p>The separation of "Threatened" vs. "Not Threatened" species allows for quick comparisons, but it lacks intermediate risk categories (e.g., "Vulnerable" vs. "Critically Endangered").</p>
+                        <p><strong>Color Encoding:</strong></p>
+                        <p>Red for threatened species vs. black for non-threatened species provides strong contrast, supporting Tufte's principles of expressiveness and salience​.</p>
+                        <p>However, no color differentiation is used to show uncertainty in species classification.</p>
+                        <p><strong>Readability &amp; Labeling:</strong></p>
+                        <p>The labels and text are legible and strategically placed to guide the viewer through the visualization.</p>
+                        <p>The lower section on extinct species could benefit from an annotation clarifying the total percentage of lost species.</p>
+                        <p><strong>Possible Solutions</strong></p>
+                        <p>Add confidence intervals or indicate uncertainty in estimates.</p>
+                        <p>Introduce a gradient color scale to distinguish levels of endangerment.</p>
+                        <p>Provide comparative historical extinction rates for better context.</p>
+                    `;
+                } else {
+                    image.src = "https://i.pinimg.com/736x/1d/96/70/1d96709c73b742f8d3caa2207a9753e1.jpg";
+                    // Original parent's text for Example 2
+                    textContainer.innerHTML = `
+                        <h3><strong>Evaluation of the Data Visualization: "AI Sentiment and Topic Processing Pipeline"</strong></h3>
+                        <p><strong>Background</strong></p>
+                        <p><strong>Purpose:</strong></p><p>This visualization demonstrates how AI processes textual data, moving from raw social media input to structured sentiment and topic analysis.</p>
+                        <p><strong>Narrative & Emphasis:</strong></p>
+                        </p>The layered structure highlights hierarchical data transformation, moving from raw data to structured insights..</p>
+                        <p><strong>Data Issues</strong></p>
+                        <p><strong>Accuracy &amp; Completeness:</strong></p>
+                        <p>The pipeline is well-structured, but it lacks numerical metrics for each processing stage.</p>
+                        <p>Terms like "Engelbart" (used in the agent layer) should be clarified—does this refer to a specific algorithm or a metaphorical AI concept?</p>
+                        <p><strong>Comparability &amp; Context:</strong></p>
+                        <p>There is no clear benchmarking against other sentiment analysis methods.</p>
+                        <p>Popularity clustering is explained conceptually but lacks specificity on how clusters are calculated (e.g., TF-IDF, word embeddings).</p>
+                        <p><strong>Idiom Issues (Visualization Technique)</strong></p>
+                        <p><strong>Chart Selection &amp; Design:</strong></p>
+                        <p>The layered hierarchical approach effectively represents data transformation.</p>
+                        <p>However, missing arrows or directional indicators create ambiguity in the data flow.</p>
+                        <p><strong>Color Encoding:</strong></p>
+                        <p>Gradient blue-to-purple hues provide a visually pleasing aesthetic but do not clearly differentiate between process stages.</p>
+                        <p>A more distinct color scheme per layer (e.g., NLP, sentiment, topic modeling) would improve clarity.</p>
+                        <p><strong>Readability &amp; Labeling:</strong></p>
+                        <p>Some labels are too small and might be difficult to read, particularly for "Topic Modeling" and "Twitter Stream" layers.</p>
+                        <p>The lack of real-world examples (e.g., sample sentences or word embeddings) makes it harder for viewers unfamiliar with NLP to grasp the concepts.</p>
+                        <p><strong>Possible Solutions</strong></p>
+                        <p>Use arrows or directional lines to indicate data flow</p>
+                        <p>Differentiate color schemes for each stage to clarify distinctions.</p>
+                        <p>Include example sentences in the topic modeling and sentiment layers.</p>
+                    `;
+                }
+                image.style.opacity = '1';
+                // Call our function to reformat the text into two columns
+                updateTextContent();
+            }, 500);
+        }
+
+        function showImage(imageUrl) {
+            const image = document.querySelector('.uploaded-image');
+            const textContainer = document.getElementById('text-container');
+            image.style.opacity = '0';
+            setTimeout(() => {
+                image.src = imageUrl;
+                textContainer.innerHTML = ``; // Page 3 has no text
+                image.style.opacity = '1';
+            }, 500);
+        }
+    </script>
+</head>
+<body>
+    <!-- Intro Screen -->
+    <div id="intro-screen">
+        <h1>Data Visualization Critique</h1>
+        <p>Assingment 2 - 02.526 Interactive Data Visualization (2025)</p>
+        <p>1009465 / Utkarsh Chaudhary</p>
+        <div id="arrow" onclick="startApp()">⬇</div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+        <div id="main-content">
+            <div id="image-container">
+                <img src="http://longfuture.org/no-dodo-zone/graphics/sixth.jpg" class="uploaded-image" alt="Preloaded Image">
+            </div>
+            <div id="text-container"></div>
+        </div>
+        <div id="button-container">
+            <button id="button1" class="example-button active" onclick="switchExample(1)">Example 1</button>
+            <button id="button2" class="example-button" onclick="switchExample(2)">Example 2</button>
+            <button class="extra-button" onclick="showImage('https://i.pinimg.com/736x/5b/0b/bd/5b0bbd8091c5bdc996b0f29743fe3d54.jpg')">Page 3</button>
+        </div>
+    </div>
+
+    <script>switchExample(1);</script>
+    
+    <!-- Additional CSS for two-column text layout -->
+    <style id="additional-css">
+      .text-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          margin-top: 20px;
+      }
+      .text-layout p {
+          text-align: left;
+          margin: 5px 0;
+      }
+      .left-column, .center-column {
+          text-align: left;
+      }
+    </style>
+    
+    <!-- Additional JavaScript to reformat the text content -->
+    <script>
+      function updateTextContent() {
+        const textContainer = document.getElementById('text-container');
+        const activeButton = document.querySelector('.example-button.active');
+        
+        if (activeButton && activeButton.id === "button1") {
+          textContainer.innerHTML = `
+            <h3><strong>Evaluation of the Data Visualization: "Are We in the Midst of a Sixth Mass Extinction?"</strong></h3>
+            <div class="text-layout">
+              <div class="left-column">
+                <p><strong>Background</strong></p>
+                <p></p>
+                <p><strong>1.Purpose:</strong></p>
+                <p>This visualization aims to inform and alarm the audience about the ongoing biodiversity crisis by visually comparing current extinction rates to historical mass extinction events.</p>
+                <p></p>
+                <p><strong>2.Narrative &amp; Emphasis:</strong></p>
+                <p>Uses historical data to contextualize current biodiversity threats.</p>
+                <p>Graphical elements (icons &amp; color coding) emphasize species loss.</p>
+                <p>Attempts to evoke urgency through visual contrast and grouping.</p>
+                <p>______________________________________________________________</p>
+                <p><strong>Idiom Issues (Visualization Technique):</strong></p>
+                <p></p>
+                <p><strong>1.Chart Selection &amp; Design:</strong></p>
+                <p>The pictogram-based approach (icons representing extinct species) is effective for casual readers but lacks precision for scientific audiences.</p>
+                <p>Alternatives: A line chart showing extinction trends over time would allow clearer comparisons.</p>
+                <p></p>
+                <p><strong>2.Color Encoding:</strong></p>
+                <p>Red = danger, which is intuitive, but no intermediate colors are used for varying levels of threat.</p>
+                <p>Lack of uncertainty representation: Present-day extinction rates are based on models, yet certainty levels are not visually encoded.</p>
+                <p></p>
+                <p><strong>3.Readability &amp; Labeling:</strong></p>
+                <p>The proportional representation of extinct species is easy to understand, but text size & small details may be hard to read on mobile devices.</p>
+                <p>If interactive elements were included (for digital versions), users could explore species-specific data in greater detail.</p>
+                
+              </div>
+              <div class="center-column">
+                
+                <p><strong>Data Representation Issues</strong></p>
+                <p></p>
+                <p><strong> 1.Scale & Accuracy:</strong></p>
+                <p>The infographic provides proportional representations of extinction rates, but it lacks detailed references to data sources, confidence intervals, or variability in estimates.</p>
+                <p>Comparison over time: The data lacks a common scale, making it difficult to assess whether the current rate of extinction is indeed higher than past events.</p>
+                <p>Overgeneralization: The threat level for different species is grouped, potentially oversimplifying the complex nature of biodiversity loss.</p>
+                <p></p>
+                <p><strong> 2.Levels of Measurement:</strong></p>
+                <p>The visualization uses nominal (species categories) and ratio (species extinction rates) scales.</p>
+                <p>However, data standardization is unclear—are the past extinctions calculated using the same methodology as the present?</p>
+                <p>______________________________________________________________</p>
+                <p><strong>Possible Solutions:</strong></p>
+                <p>Introduce historical benchmarks & standardized extinction rate scales.</p>
+                <p>Use gradient colors to differentiate levels of species endangerment.</p>
+                <p>Add confidence intervals & uncertainty indicators to prevent misleading interpretations.</p>
+                <p>Consider a line or area chart in addition to pictograms for clearer trends.</p>
+              </div>
+            </div>
+          `;
+        } else if (activeButton && activeButton.id === "button2") {
+          textContainer.innerHTML = `
+            <h3><strong>Evaluation of the Data Visualization: "AI Sentiment and Topic Processing Pipeline"</strong></h3>
+            <div class="text-layout">
+              <div class="left-column">
+                <p><strong>Background</strong></p>
+                <p></p>
+                <p><strong>1.Purpose:</strong></p>
+                <p>To illustrate an AI-based process for extracting sentiment and topics from social media.</p>
+                <p></p>
+                <p><strong>2.Narrative &amp; Emphasis:</strong></p>
+                <p>Emphasizes the sequential nature of data transformation.</p>
+                <p>Conceptual clarity is prioritized over numerical precision.</p>
+                <p>Uses layered design to show processing stages.</p>
+                <p>______________________________________________________________</p>
+                <p><strong>Idiom Issues (Visualization Technique):</strong></p>
+                <p></p>
+                <p><strong>1.Chart Selection &amp; Design:</strong></p>
+                <p>The layered flow diagram is effective for conveying hierarchy, but lacks arrows or directional cues to clarify sequence of transformations.</p>
+                <p>Alternative: A step-by-step flowchart with explicit connections could be clearer.</p>
+                <p></p>
+                <p><strong>2.Color Encoding:</strong></p>
+                <p>Gradient color usage is aesthetically pleasing but fails to differentiate between distinct processing steps.</p>
+                <p>Alternative: Assign unique colors to each processing layer to reinforce distinct functions</p>
+                <p></p>
+                <p><strong>3.Readability &amp; Labeling:</strong></p>
+                <p>Some labels are too small, making it difficult to read finer details.</p>
+                <p>Lack of interactivity: An interactive version could allow users to click on layers for additional explanations.</p>
+                
+                
+              </div>
+              <div class="center-column">
+                
+                <p><strong>Data Issues</strong></p>
+                <p></p>
+                <p><strong>1.Data Abstraction & Typology Issues:</strong></p>
+                <p>The visualization focuses on process representation rather than numerical data.</p>
+                <p>It lacks quantitative indicators (e.g., sentiment score ranges, accuracy rates of AI models).</p>
+                <p>No benchmarking or comparative metrics—how does this AI pipeline compare to human analysis or other NLP models?</p>
+                <p>______________________________________________________________</p>
+                <p><strong>Possible Solutions:</strong></p>
+                <p>Add arrows or explicit step markers to reinforce process flow.</p>
+                <p>Introduce distinct color coding for each processing stage.</p>
+                <p>Incorporate quantitative benchmarks (e.g., accuracy of sentiment models, number of processed tweets).</p>
+                <p>Enlarge text and include callouts for key stages.</p>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        // Update text content after a short delay to ensure parent's text is loaded
+        setTimeout(updateTextContent, 600);
+
+        // Re-update text content whenever an example button is clicked
+        const exampleButtons = document.querySelectorAll('.example-button');
+        exampleButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            setTimeout(updateTextContent, 600);
+          });
+        });
+      });
+    </script>
+</body>
+</html>
